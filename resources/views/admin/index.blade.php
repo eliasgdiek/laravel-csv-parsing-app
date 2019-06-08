@@ -12,7 +12,7 @@
     </section>
 
     <section class="content">
-        
+
         <div class="row">
 
             <div class="col-md-3 col-sm-6 col-xs-12">
@@ -58,13 +58,13 @@
 
 
         </div>
-        
+
         <div class="row">
             <div class="col-md-8">
                 <div class="box box-info">
                     <div class="box-header with-border">
                         <h3 class="box-title">Latest Processes</h3>
-        
+
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                             </button>
@@ -104,14 +104,14 @@
                     </div>
                 </div>
             </div>
-        
+
             <div class="col-md-4">
                 <div class="info-box bg-yellow">
                     <span class="info-box-icon"><i class="ion ion-ios-pricetag-outline"></i></span>
                     <div class="info-box-content">
                         <span class="info-box-text">Total dataset amount</span>
                         <span class="info-box-number">{{$total_dataset_amount}}</span>
-        
+
                         <div class="progress">
                             <div class="progress-bar" style="width: 30%"></div>
                         </div>
@@ -119,11 +119,11 @@
                 </div>
                 <div class="info-box bg-green">
                     <span class="info-box-icon"><i class="fa fa-hourglass-end"></i></span>
-        
+
                     <div class="info-box-content">
                         <span class="info-box-text">Completed Processes</span>
                         <span class="info-box-number">{{$completed_processes}}</span>
-        
+
                         <div class="progress">
                             <div class="progress-bar" style="width: 30%"></div>
                         </div>
@@ -131,11 +131,11 @@
                 </div>
                 <div class="info-box bg-red">
                     <span class="info-box-icon"><i class="fa fa-hourglass"></i></span>
-        
+
                     <div class="info-box-content">
                         <span class="info-box-text">Processes in progress</span>
                         <span class="info-box-number">{{$in_progress_processes}}</span>
-        
+
                         <div class="progress">
                             <div class="progress-bar" style="width: 10%"></div>
                         </div>
@@ -143,11 +143,11 @@
                 </div>
                 <div class="info-box bg-aqua">
                     <span class="info-box-icon"><i class="fa fa-money"></i></span>
-        
+
                     <div class="info-box-content">
                         <span class="info-box-text">Total payments</span>
                         <span class="info-box-number">{{$total_payments}}</span>
-        
+
                         <div class="progress">
                             <div class="progress-bar" style="width: 30%"></div>
                         </div>
