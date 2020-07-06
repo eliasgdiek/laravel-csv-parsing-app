@@ -1,5 +1,11 @@
 @extends('layouts.app')
-
+@section('styles')
+{!! htmlScriptTagJsApi([
+  'action' => 'register',
+  'callback_then' => 'callbackThen',
+  'callback_catch' => 'callbackCatch'
+]) !!}
+@endsection
 @section('content')
 <br />
 <br />

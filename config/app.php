@@ -178,7 +178,7 @@ return [
         Spatie\Geocoder\GeocoderServiceProvider::class,
         App\Providers\ViewServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
-
+        Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
     ],
 
     /*
@@ -231,7 +231,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Geocoder' => Spatie\Geocoder\Facades\Geocoder::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
-
+        'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
     ],
 
 ];
