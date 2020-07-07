@@ -11,6 +11,7 @@ use App\User;
 use App\Dataset;
 use DB;
 use Auth;
+use Exception;
 
 class UserController extends Controller
 {
@@ -36,17 +37,22 @@ class UserController extends Controller
             $result['data'][$i][2] = $user->l_name;
             $result['data'][$i][3] = "<a href='mailto:".$user->email."' class='email'>".$user->email."</a>";
             
-            if(null !== $user->pricing && 0 !== $user->pricing) {
-                if(null !== $user->processed) {
-                    $result['data'][$i][4] = strtoupper($user->package->name);
-                    $result['data'][$i][5] = $user->package->rows - $user->processed;
+            try {
+                if(null !== $user->pricing && 0 !== $user->pricing) {
+                    if(null !== $user->processed) {
+                        $result['data'][$i][4] = strtoupper($user->package->name);
+                        $result['data'][$i][5] = $user->package->rows - $user->processed;
+                    }
+                    else {
+                        $result['data'][$i][4] = strtoupper($user->package->name);
+                        $result['data'][$i][5] = $user->package->rows - 0;
+                    }
                 }
                 else {
-                    $result['data'][$i][4] = strtoupper($user->package->name);
-                    $result['data'][$i][5] = $user->package->rows - 0;
+                    $result['data'][$i][4] = 'NONE';
+                    $result['data'][$i][5] = 0;
                 }
-            }
-            else {
+            } catch (Exception $e) {
                 $result['data'][$i][4] = 'NONE';
                 $result['data'][$i][5] = 0;
             }
