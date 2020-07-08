@@ -115,13 +115,21 @@ class WorkingendController extends Controller
         $writer = Writer::createFromPath(storage_path('app/report/').$filelist->user->email.'/'.$filelist->table_name.'.csv', 'w+');
         $writer->addFormatter($encoder);
 
-        $header = ['Salutation','First Name','Last Name','Constituency Name','Party','Totals'];
+        $header = ['Salutation','First Name','Last Name','Constituency Name','Party','Totals','','', 'Party Totals'];
 
         $writer->insertOne($header);
 
+        $source = $sorted;
+        $sum_arr = self::getSum($source);
+
         for($i=0; $i<count($sorted); $i++) {
             $arr = $sorted[$i];
-            $writer->insertOne([ $arr['salutation'],$arr['f_name'],$arr['l_name'],$arr['constituency'],$arr['party'],$arr['frequency'] ]);
+            if($i < count($sum_arr)) {
+                $writer->insertOne([ $arr['salutation'],$arr['f_name'],$arr['l_name'],$arr['constituency'],$arr['party'],$arr['frequency'], ' ', ' ', $sum_arr[$i]['party'], $sum_arr[$i]['total'] ]);
+            }
+            else {
+                $writer->insertOne([ $arr['salutation'],$arr['f_name'],$arr['l_name'],$arr['constituency'],$arr['party'],$arr['frequency'] ]);
+            }
         }
     }
 
@@ -132,19 +140,25 @@ class WorkingendController extends Controller
         $result = [];
         
         $i = 0;
+        
         while(DB::table($table)->count()) {
             $temp = DB::table($table)->first();
             $cons_temp = $temp->ConstituencyName;
 
-            $frequency = DB::table($table)->where('ConstituencyName','=',$cons_temp)->count();
-            $result[$i]['frequency'] = $frequency;
-            $result[$i]['salutation'] = $temp->SalutationEng;
-            $result[$i]['f_name'] = $temp->ParlFirstName;
-            $result[$i]['l_name'] = $temp->ParlLastName;
-            $result[$i]['constituency'] = $temp->ConstituencyName;
-            $result[$i]['party'] = $temp->PartyShortTitle;
-            $frequency = DB::table($table)->where('ConstituencyName','=',$cons_temp)->delete();
-            $i++;
+            if($cons_temp != 'INFORMATION NOT FOUND') {
+                $frequency = DB::table($table)->where('ConstituencyName','=',$cons_temp)->count();
+                $result[$i]['frequency'] = $frequency;
+                $result[$i]['salutation'] = $temp->SalutationEng;
+                $result[$i]['f_name'] = $temp->ParlFirstName;
+                $result[$i]['l_name'] = $temp->ParlLastName;
+                $result[$i]['constituency'] = $temp->ConstituencyName;
+                $result[$i]['party'] = $temp->PartyShortTitle;
+                DB::table($table)->where('ConstituencyName','=',$cons_temp)->delete();
+                $i++;
+            }
+            else {
+                DB::table($table)->where('ConstituencyName','=',$cons_temp)->delete();
+            }
         }
 
         $sorted = array_reverse(Arr::sort($result));
@@ -159,14 +173,112 @@ class WorkingendController extends Controller
         $writer = Writer::createFromPath(storage_path('app/report/').$filelist->user->email.'/'.$filelist->table_name.'.csv', 'w+');
         $writer->addFormatter($encoder);
 
-        $header = ['Salutation','First Name','Last Name','Constituency Name','Party','Totals'];
+        $header = ['Salutation','First Name','Last Name','Constituency Name','Party','Totals','','', 'Party Totals'];
 
         $writer->insertOne($header);
 
+        $source = $sorted;
+        $sum_arr = self::getSum($source);
+
         for($i=0; $i<count($sorted); $i++) {
             $arr = $sorted[$i];
-            $writer->insertOne([ $arr['salutation'],$arr['f_name'],$arr['l_name'],$arr['constituency'],$arr['party'],$arr['frequency'] ]);
+            if($i < count($sum_arr)) {
+                $writer->insertOne([ $arr['salutation'],$arr['f_name'],$arr['l_name'],$arr['constituency'],$arr['party'],$arr['frequency'], ' ', ' ', $sum_arr[$i]['party'], $sum_arr[$i]['total'] ]);
+            }
+            else {
+                $writer->insertOne([ $arr['salutation'],$arr['f_name'],$arr['l_name'],$arr['constituency'],$arr['party'],$arr['frequency'] ]);
+            }
         }
+    }
+
+    public function getSum($source) {
+        $temp = Arr::pluck($source, 'party');
+        $temp = array_unique($temp);
+        $result = [];
+        $j = 0;
+
+        foreach($temp as $item) {
+            if($item == 'INFORMATION NOT FOUND') {
+                continue;
+            }
+
+            $result[$j]['total'] = 0;
+            $result[$j]['party'] = $item;
+
+            for($i=0; $i<count($source); $i++) {
+                if($result[$j]['party'] == $source[$i]['party']) {
+                    $result[$j]['total'] += $source[$i]['frequency'];
+                }
+            }
+
+            $j++;
+        }
+
+        return array_reverse(Arr::sort($result));
+    }
+
+    public function ttt() {
+        $source = [
+            ['name' => 'a', 'total' => 2],
+            ['name' => 'a', 'total' => 1],
+            ['name' => 'a', 'total' => 3],
+            ['name' => 'b', 'total' => 5],
+            ['name' => 'b', 'total' => 2],
+            ['name' => 'c', 'total' => 4],
+            ['name' => 'c', 'total' => 7],
+            ['name' => 'b', 'total' => 2],
+            ['name' => 'b', 'total' => 2],
+            ['name' => 'a', 'total' => 2],
+            ['name' => 'c', 'total' => 2],
+            ['name' => 'c', 'total' => 2],
+            ['name' => 'b', 'total' => 2],
+            ['name' => 'a', 'total' => 2],
+        ];
+
+        $temp = array_unique(Arr::pluck($source, 'name'));
+        $result = [];
+
+        $j = 0;
+        foreach($temp as $item) {
+            $result[$j]['name'] = $item;
+            $result[$j]['total'] = 0;
+            for($i=0; $i<count($source); $i++) {
+                if($result[$j]['name'] == $source[$i]['name']) {
+                    $result[$j]['total'] += $source[$i]['total'];
+                }
+            }
+            $j++;
+        }
+
+        dd($result);
+    }
+
+    public function eee() {
+        $arr = [
+            "Liberal",
+            "My house",
+            "Liberal",
+            "Conservative",
+            "Republic",
+            "New Democratic Party",
+            "Liberal",
+            "Conservative",
+            "Conservative",
+            "New Democratic Party",
+            "Conservative",
+            "Liberal",
+            "Conservative",
+            "Liberal",
+            "Liberal",
+            "My house",
+            "Republic",
+            "Conservative",
+            "Liberal",
+            "Liberal",
+            "Liberal"
+        ];
+
+        dd(array_unique($arr));
     }
 
     public function download(Request $request) {

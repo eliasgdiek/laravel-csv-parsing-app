@@ -6269,9 +6269,9 @@ $(document).ready(function() {
 
     $("#user-delete").click(function() {
         $("#user-table tr.selected").each(function() {
-            let user_id = $(this).find('.email').text();
+            let user_id = encodeURIComponent($(this).find('.email').text());
             let elem = $(this);
-            
+            console.log('[email]', user_id);
             $.ajax({
                 url: _base_url+'admin/user_delete',
                 type: 'post',
