@@ -133,6 +133,28 @@ class WorkingendController extends Controller
         }
     }
 
+    public function getSum($source) {
+        $temp = Arr::pluck($source, 'party');
+        $temp = array_unique($temp);
+        $result = [];
+        $j = 0;
+
+        foreach($temp as $item) {
+            $result[$j]['total'] = 0;
+            $result[$j]['party'] = $item;
+
+            for($i=0; $i<count($source); $i++) {
+                if($result[$j]['party'] == $source[$i]['party']) {
+                    $result[$j]['total'] += $source[$i]['frequency'];
+                }
+            }
+
+            $j++;
+        }
+
+        return array_reverse(Arr::sort($result));
+    }
+
     public function test() {
         $filelist = Filelist::first();
         $table = $filelist->table_name;
@@ -145,20 +167,15 @@ class WorkingendController extends Controller
             $temp = DB::table($table)->first();
             $cons_temp = $temp->ConstituencyName;
 
-            if($cons_temp != 'INFORMATION NOT FOUND') {
-                $frequency = DB::table($table)->where('ConstituencyName','=',$cons_temp)->count();
-                $result[$i]['frequency'] = $frequency;
-                $result[$i]['salutation'] = $temp->SalutationEng;
-                $result[$i]['f_name'] = $temp->ParlFirstName;
-                $result[$i]['l_name'] = $temp->ParlLastName;
-                $result[$i]['constituency'] = $temp->ConstituencyName;
-                $result[$i]['party'] = $temp->PartyShortTitle;
-                DB::table($table)->where('ConstituencyName','=',$cons_temp)->delete();
-                $i++;
-            }
-            else {
-                DB::table($table)->where('ConstituencyName','=',$cons_temp)->delete();
-            }
+            $frequency = DB::table($table)->where('ConstituencyName','=',$cons_temp)->count();
+            $result[$i]['frequency'] = $frequency;
+            $result[$i]['salutation'] = $temp->SalutationEng;
+            $result[$i]['f_name'] = $temp->ParlFirstName;
+            $result[$i]['l_name'] = $temp->ParlLastName;
+            $result[$i]['constituency'] = $temp->ConstituencyName;
+            $result[$i]['party'] = $temp->PartyShortTitle;
+            DB::table($table)->where('ConstituencyName','=',$cons_temp)->delete();
+            $i++;
         }
 
         $sorted = array_reverse(Arr::sort($result));
@@ -189,32 +206,6 @@ class WorkingendController extends Controller
                 $writer->insertOne([ $arr['salutation'],$arr['f_name'],$arr['l_name'],$arr['constituency'],$arr['party'],$arr['frequency'] ]);
             }
         }
-    }
-
-    public function getSum($source) {
-        $temp = Arr::pluck($source, 'party');
-        $temp = array_unique($temp);
-        $result = [];
-        $j = 0;
-
-        foreach($temp as $item) {
-            if($item == 'INFORMATION NOT FOUND') {
-                continue;
-            }
-
-            $result[$j]['total'] = 0;
-            $result[$j]['party'] = $item;
-
-            for($i=0; $i<count($source); $i++) {
-                if($result[$j]['party'] == $source[$i]['party']) {
-                    $result[$j]['total'] += $source[$i]['frequency'];
-                }
-            }
-
-            $j++;
-        }
-
-        return array_reverse(Arr::sort($result));
     }
 
     public function ttt() {

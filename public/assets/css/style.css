@@ -837,3 +837,14 @@ footer {
 #verified a.btn {
     width: auto;
 }
+
+.g-recaptcha {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#up-gcaptcha-error {
+    text-align: center;
+}

@@ -110,6 +110,8 @@
                     <label for="term">{!!$settings->terms_text!!}</label>
                 </div>
 
+                {!! NoCaptcha::display() !!}
+
                 <button class="btn btn-lg btn-primary btn-block signup-btn mb20" type="submit">
                     <span class="signup-btn-text">Create my account</span><div class="spinner-border alert-white center hide" id="signup-spinner"></div>
                 </button>

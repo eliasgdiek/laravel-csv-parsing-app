@@ -179,6 +179,7 @@ return [
         App\Providers\ViewServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
+        Anhskohbo\NoCaptcha\NoCaptchaServiceProvider::class,
     ],
 
     /*
@@ -232,6 +233,7 @@ return [
         'Geocoder' => Spatie\Geocoder\Facades\Geocoder::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
+        'NoCaptcha' => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
     ],
 
 ];
