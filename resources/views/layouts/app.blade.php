@@ -222,7 +222,7 @@
 
                 {!! NoCaptcha::display() !!}
 
-                <span class="invalid-feedback pb20" role="alert" id="up-gcaptcha-error"></span>
+                <span class="invalid-feedback pb20 hide" role="alert" id="up-gcaptcha-error"></span>
                 @if ($errors->has('g-recaptcha-response'))
                   <span class="invalid-feedback pb20" role="alert" id="up-gcaptcha-error">
                     {{ $errors->first('g-recaptcha-response') }}
