@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('styles')
-
+{!! htmlScriptTagJsApi([
+    'action' => 'contact',
+    'callback_then' => 'callbackThen',
+    'callback_catch' => 'callbackCatch'
+]) !!}
 @endsection
 
 @section('content')
@@ -21,16 +25,49 @@
             <form action="{{ route('contact.post') }}" method="POST" class="myform form">
                 @csrf
                 <div class="form-group">
-                <input type="text" class="form-control" name="name" placeholder="Your Name" required autofocus>
+                    <input type="text" class="form-control" name="name" placeholder="Your Name" value="{{ old('name') }}" required autofocus>
+
+                    @if ($errors->has('name'))
+                    <span class="invalid-feedback pb20" role="alert">
+                        {{ $errors->first('name') }}
+                    </span>
+                    @endif
                 </div>
                 <div class="form-group">
-                <input type="email" class="form-control" name="email" placeholder="Your Email" required>
+                    <input type="email" class="form-control" name="email" placeholder="Your Email" value="{{ old('email') }}" required>
+
+                    @if ($errors->has('email'))
+                    <span class="invalid-feedback pb20" role="alert">
+                        {{ $errors->first('email') }}
+                    </span>
+                    @endif
                 </div>
                 <div class="form-group">
-                <input type="tel" class="form-control" name="phone" placeholder="Your Phone">
+                    <input type="tel" class="form-control" name="phone" placeholder="Your Phone" value="{{ old('phone') }}">
+
+                    @if ($errors->has('phone'))
+                    <span class="invalid-feedback pb20" role="alert">
+                        {{ $errors->first('phone') }}
+                    </span>
+                    @endif
                 </div>
                 <div class="form-group">
-                <textarea class="form-control" cols="30" name="message" rows="10" placeholder="Write a Message" required></textarea>
+                    <textarea class="form-control" cols="30" name="message" rows="10" placeholder="Write a Message" required>{{ old('message') }}</textarea>
+
+                    @if ($errors->has('message'))
+                    <span class="invalid-feedback pb20" role="alert">
+                        {{ $errors->first('message') }}
+                    </span>
+                    @endif
+                </div>
+                <div class="form-group">
+                    {!! NoCaptcha::display() !!}
+    
+                    @if ($errors->has('g-recaptcha-response'))
+                    <span class="invalid-feedback pb20 captcha-err" role="alert">
+                        {{ $errors->first('g-recaptcha-response') }}
+                    </span>
+                    @endif
                 </div>
                 <div class="form-group">
                     <input type="submit" class="btn btn-primary right" value="Send Message">

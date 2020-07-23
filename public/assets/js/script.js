@@ -96,6 +96,11 @@ $(document).ready(function() {
                             $('#up-pwd-alert').addClass('show');
                             $('#up-pwd-alert').text(data.responseJSON.errors.password[0]);
                         }
+                        else if(data.responseJSON.errors['g-recaptcha-response']) {
+                            console.log(data.responseJSON.errors['g-recaptcha-response'][0]);
+                            $("#up-gcaptcha-error").addClass('show');
+                            $("#up-gcaptcha-error").text(data.responseJSON.errors['g-recaptcha-response'][0]);
+                        }
                     }
                 }
                 else {

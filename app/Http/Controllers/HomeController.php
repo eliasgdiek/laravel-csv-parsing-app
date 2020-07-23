@@ -17,6 +17,7 @@ use App\Pricing;
 use Str;
 use App\Notifications\ContactUs;
 use App\User;
+use Exception;
 
 class HomeController extends Controller
 {
@@ -90,14 +91,14 @@ class HomeController extends Controller
                 $result['error'] = $invalid_csv_message;
                 $result['header'] = 'none';
 
-                return response()->json($result);
+                return response()->json($result, 500);
             }
         }
         else {
             $result['error'] = $empty_header_message;
             $result['header'] = 'none';
 
-            return response()->json($result);
+            return response()->json($result, 500);
         }
     }
 
@@ -126,7 +127,7 @@ class HomeController extends Controller
         $length = count($csv);
 
         $row = 1;
-        while (($data = fgetcsv($file, $length, ",")) !== FALSE) {
+        while (($data = fgetcsv($file, 0, ",")) !== FALSE) {
             $each_records_count = count($data);
             if($header_count != $each_records_count) {
                 fclose($file);
@@ -169,20 +170,26 @@ class HomeController extends Controller
         }
 
         $file_info[count($file)] = Dataset::where('active','=',1)->get(['id','name']);
-        if(null !== Auth::user()->pricing) {
-            $current_plan = Auth::user()->package->rows;
-            if(null !== Auth::user()->processed) {
-                $file_info[count($file)+1] = Auth::user()->package->rows - Auth::user()->processed;
+
+        try {
+            if(null !== Auth::user()->pricing) {
+                $current_plan = Auth::user()->package->rows;
+                if(null !== Auth::user()->processed) {
+                    $file_info[count($file)+1] = Auth::user()->package->rows - Auth::user()->processed;
+                }
+                else {
+                    $file_info[count($file)+1] = Auth::user()->package->rows - 0;
+                }
             }
             else {
-                $file_info[count($file)+1] = Auth::user()->package->rows - 0;
+                $file_info[count($file)+1] = 0;
             }
-        }
-        else {
-            $file_info[count($file)+1] = 0;
-        }
 
-        return response()->json($file_info);
+            return response()->json($file_info);
+        } catch (Exception $e) {
+            $file_info[count($file)+1] = 0;
+            return response()->json($file_info);
+        }
     }
     
     public function processor(Request $requrest) {

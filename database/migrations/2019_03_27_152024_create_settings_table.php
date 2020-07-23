@@ -21,7 +21,7 @@ class CreateSettingsTable extends Migration
             $table->string('meta_title')->nullable();
             $table->string('meta_keywords')->nullable();
             $table->string('meta_description')->nullable();
-            $table->test('google_analytics')->nullable();
+            $table->string('google_analytics')->nullable();
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
             $table->text('address')->nullable();

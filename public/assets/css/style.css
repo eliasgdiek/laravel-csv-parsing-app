@@ -453,7 +453,7 @@ legend{
     margin: 0 auto;
 }
 footer {
-    z-index: 4;
+    z-index: 0;
     position: relative;
 }
 @media (min-width:768px) {
@@ -469,6 +469,7 @@ footer {
         position: fixed !important;
         bottom: 0;
         width: 100%;
+        z-index: 0;
     }
 }
 @media (min-width:500px) {
@@ -835,4 +836,29 @@ footer {
 
 #verified a.btn {
     width: auto;
+}
+
+.g-recaptcha {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#up-gcaptcha-error {
+    text-align: center;
+}
+
+.contact-form .g-recaptcha {
+    margin-bottom: 20px;
+    display: block;
+}
+#contact-page .g-recaptcha {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.invalid-feedback.captcha-err {
+    text-align: right;
 }

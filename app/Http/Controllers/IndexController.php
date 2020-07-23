@@ -31,6 +31,14 @@ class IndexController extends Controller
     }
 
     public function do_contact(Request $request) {
+        $validatedData = $request->validate([
+            'name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'message' => 'required|string',
+            'g-recaptcha-response' => 'required|captcha'
+        ]);
+        
         $data = [];
         $data['name'] = $request->get('name');
         $data['email'] = $request->get('email');

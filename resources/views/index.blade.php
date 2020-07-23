@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('styles')
-
+{!! htmlScriptTagJsApi([
+  'action' => 'homepage',
+  'callback_then' => 'callbackThen',
+  'callback_catch' => 'callbackCatch'
+]) !!}
 @endsection
 
 @section('content')
@@ -87,20 +91,53 @@ style="background-image: url(./assets/img/image_1.jpg);" data-section="home" dat
             </div>
         @endif
       <div class="col-md-6 col-xs-12">
-          <form action="{{ route('contact.post') }}" method="POST" class="probootstrap-form form">
+          <form action="{{ route('contact.post') }}" method="POST" class="probootstrap-form contact-form form">
               @csrf
               <h2 class="text-black mt0">Get In Touch</h2>
               <div class="form-group">
-                  <input type="text" class="form-control" name="name" placeholder="Your Name" required>
+                  <input type="text" class="form-control" name="name" placeholder="Your Name" value="{{ old('name') }}" required>
+
+                  @if ($errors->has('name'))
+                  <span class="invalid-feedback pb20" role="alert">
+                      {{ $errors->first('name') }}
+                  </span>
+                  @endif
               </div>
               <div class="form-group">
-                  <input type="email" class="form-control" name="email" placeholder="Your Email" required>
+                  <input type="email" class="form-control" name="email" placeholder="Your Email" value="{{ old('email') }}" required>
+
+                  @if ($errors->has('email'))
+                  <span class="invalid-feedback pb20" role="alert">
+                      {{ $errors->first('email') }}
+                  </span>
+                  @endif
               </div>
               <div class="form-group">
-                  <input type="tel" class="form-control" name="phone" placeholder="Your Phone">
+                  <input type="tel" class="form-control" name="phone" placeholder="Your Phone" value="{{ old('phone') }}">
+
+                  @if ($errors->has('phone'))
+                  <span class="invalid-feedback pb20" role="alert">
+                      {{ $errors->first('phone') }}
+                  </span>
+                  @endif
               </div>
               <div class="form-group">
-                  <textarea class="form-control" cols="30" name="message" rows="10" placeholder="Write a Message" required></textarea>
+                  <textarea class="form-control" cols="30" name="message" rows="10" placeholder="Write a Message" required>{{ old('message') }}</textarea>
+
+                  @if ($errors->has('message'))
+                  <span class="invalid-feedback pb20" role="alert">
+                      {{ $errors->first('message') }}
+                  </span>
+                  @endif
+              </div>
+              <div class="form-group">
+                {!! NoCaptcha::display() !!}
+
+                @if ($errors->has('g-recaptcha-response'))
+                <span class="invalid-feedback pb20" role="alert">
+                    {{ $errors->first('g-recaptcha-response') }}
+                </span>
+                @endif
               </div>
               <div class="form-group">
                 <input type="submit" class="btn btn-primary" value="Send Message">
@@ -130,4 +167,14 @@ style="background-image: url(./assets/img/image_1.jpg);" data-section="home" dat
 
 @section('scripts')
 <script src="{{ asset('assets/js/custom.js') }}"></script>
+
+<script>
+  $elem = $('.contact-form .invalid-feedback')
+  console.log('[elem]', $elem.length);
+  if($elem.length) {
+    $('html, body').animate({
+      scrollTop: $('[data-section="contact"]').offset().top
+    }, 500, 'easeInOutExpo');
+  }
+</script>
 @endsection

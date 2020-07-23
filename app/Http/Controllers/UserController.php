@@ -13,6 +13,7 @@ use route;
 use Illuminate\Support\Facades\Validator;
 use Hash;
 use Session;
+use Exception;
 
 class UserController extends Controller
 {
@@ -34,16 +35,21 @@ class UserController extends Controller
             ['status','=',1]
         ])->count();
 
-        if(null !== Auth::user()->pricing && 0 !== Auth::user()->pricing) {
-            $current_plan = Auth::user()->package->rows;
-            if(null !== Auth::user()->processed) {
-                $processable_rows = Auth::user()->package->rows - Auth::user()->processed;
+        try {
+            if(null !== Auth::user()->pricing && 0 !== Auth::user()->pricing) {
+                $current_plan = Auth::user()->package->rows;
+                if(null !== Auth::user()->processed) {
+                    $processable_rows = Auth::user()->package->rows - Auth::user()->processed;
+                }
+                else {
+                    $processable_rows = Auth::user()->package->rows - 0;
+                }
             }
             else {
-                $processable_rows = Auth::user()->package->rows - 0;
+                $current_plan = 0;
+                $processable_rows = 0;
             }
-        }
-        else {
+        } catch (Exception $e) {
             $current_plan = 0;
             $processable_rows = 0;
         }
@@ -78,19 +84,25 @@ class UserController extends Controller
             ['status','=',1]
         ])->count();
 
-        if(null !== Auth::user()->pricing && 0 !== Auth::user()->pricing) {
-            $current_plan = Auth::user()->package->rows;
-            if(null !== Auth::user()->processed) {
-                $processable_rows = Auth::user()->package->rows - Auth::user()->processed;
+        try {
+            if(null !== Auth::user()->pricing && 0 !== Auth::user()->pricing) {
+                $current_plan = Auth::user()->package->rows;
+                if(null !== Auth::user()->processed) {
+                    $processable_rows = Auth::user()->package->rows - Auth::user()->processed;
+                }
+                else {
+                    $processable_rows = Auth::user()->package->rows - 0;
+                }
             }
             else {
-                $processable_rows = Auth::user()->package->rows - 0;
+                $current_plan = 0;
+                $processable_rows = 0;
             }
-        }
-        else {
+        } catch (Exception $e) {
             $current_plan = 0;
             $processable_rows = 0;
         }
+
 
         $user = User::where('id','=',Auth::user()->id)->first();
 
@@ -122,16 +134,21 @@ class UserController extends Controller
             ['status','=',1]
         ])->count();
 
-        if(null !== Auth::user()->pricing && 0 !== Auth::user()->pricing) {
-            $current_plan = Auth::user()->package->rows;
-            if(null !== Auth::user()->processed) {
-                $processable_rows = Auth::user()->package->rows - Auth::user()->processed;
+        try {
+            if(null !== Auth::user()->pricing && 0 !== Auth::user()->pricing) {
+                $current_plan = Auth::user()->package->rows;
+                if(null !== Auth::user()->processed) {
+                    $processable_rows = Auth::user()->package->rows - Auth::user()->processed;
+                }
+                else {
+                    $processable_rows = Auth::user()->package->rows - 0;
+                }
             }
             else {
-                $processable_rows = Auth::user()->package->rows - 0;
+                $current_plan = 0;
+                $processable_rows = 0;
             }
-        }
-        else {
+        } catch (Exception $e) {
             $current_plan = 0;
             $processable_rows = 0;
         }
@@ -166,16 +183,21 @@ class UserController extends Controller
             ['status','=',1]
         ])->count();
 
-        if(null !== Auth::user()->pricing && 0 !== Auth::user()->pricing) {
-            $current_plan = Auth::user()->package->rows;
-            if(null !== Auth::user()->processed) {
-                $processable_rows = Auth::user()->package->rows - Auth::user()->processed;
+        try {
+            if(null !== Auth::user()->pricing && 0 !== Auth::user()->pricing) {
+                $current_plan = Auth::user()->package->rows;
+                if(null !== Auth::user()->processed) {
+                    $processable_rows = Auth::user()->package->rows - Auth::user()->processed;
+                }
+                else {
+                    $processable_rows = Auth::user()->package->rows - 0;
+                }
             }
             else {
-                $processable_rows = Auth::user()->package->rows - 0;
+                $current_plan = 0;
+                $processable_rows = 0;
             }
-        }
-        else {
+        } catch (Exception $e) {
             $current_plan = 0;
             $processable_rows = 0;
         }

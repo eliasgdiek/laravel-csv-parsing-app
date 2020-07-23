@@ -26,6 +26,8 @@
       <script src="js/vendor/html5shiv.min.js"></script>
       <script src="js/vendor/respond.min.js"></script>
     <![endif]-->
+
+    {!! NoCaptcha::renderJs() !!}
 </head>
 
 <body class="{{$index}}">
@@ -217,6 +219,16 @@
                   &nbsp;
                   <label for="term">{!!$settings->terms_text!!}</label>
                 </div>
+
+                {!! NoCaptcha::display() !!}
+
+                <span class="invalid-feedback pb20 hide" role="alert" id="up-gcaptcha-error"></span>
+                @if ($errors->has('g-recaptcha-response'))
+                  <span class="invalid-feedback pb20" role="alert" id="up-gcaptcha-error">
+                    {{ $errors->first('g-recaptcha-response') }}
+                  </span>
+                @endif
+                
                 <button class="btn btn-lg btn-primary btn-block signup-btn mb20" type="submit">
                     <span class="signup-btn-text">Create my account</span><div class="spinner-border alert-white center hide" id="signup-spinner"></div>
                 </button> 
